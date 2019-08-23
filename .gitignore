@@ -34,6 +34,7 @@ captures/
 
 # IntelliJ
 *.iml
+.idea
 .idea/workspace.xml
 .idea/tasks.xml
 .idea/gradle.xml
@@ -63,3 +64,16 @@ fastlane/Preview.html
 fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
+将删除 .idea/inspectionProfiles/
+将删除 .idea/markdown-navigator/
+将删除 .idea/misc.xml
+将删除 .idea/modules.xml
+将删除 .idea/runConfigurations.xml
+将删除 .idea/vcs.xml
+将删除 app/
+将删除 build.gradle
+将删除 gradle.properties
+将删除 gradle/
+将删除 gradlew
+将删除 gradlew.bat
+将删除 settings.gradle
