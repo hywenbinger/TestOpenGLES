@@ -23,9 +23,6 @@ public abstract class FilterDrawer {
     private FloatBuffer mDisplayTextureBuffer;
     protected int mDisplayTextureBufferId;
 
-    private FloatBuffer mFrameTextureBuffer;
-    protected int mFrameTextureBufferId;
-
     protected float mVertexData[] = {
             -1f, -1f,// 左下角
             1f, -1f, // 右下角
@@ -45,13 +42,6 @@ public abstract class FilterDrawer {
             1f, 1f,
             0f, 0f,
             1f, 0f,
-    };
-
-    protected float mFrameBufferData[] = {
-            0f, 0f,
-            1f, 0f,
-            0f, 1f,
-            1f, 1f
     };
 
     public void create() {
@@ -78,7 +68,7 @@ public abstract class FilterDrawer {
     }
 
     protected void initVertexBufferObjects() {
-        int[] vbo = new int[4];
+        int[] vbo = new int[3];
         GLES20.glGenBuffers(vbo.length, vbo, 0);
 
         mVertexBuffer = ByteBuffer.allocateDirect(mVertexData.length * 4)
@@ -107,15 +97,6 @@ public abstract class FilterDrawer {
         mDisplayTextureBufferId = vbo[2];
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, mDisplayTextureBufferId);
         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, mDisplayTextureData.length * 4, mDisplayTextureBuffer, GLES20.GL_STATIC_DRAW);
-
-        mFrameTextureBuffer = ByteBuffer.allocateDirect(mFrameBufferData.length * 4)
-                .order(ByteOrder.nativeOrder())
-                .asFloatBuffer()
-                .put(mFrameBufferData);
-        mFrameTextureBuffer.position(0);
-        mFrameTextureBufferId = vbo[3];
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, mFrameTextureBufferId);
-        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, mFrameBufferData.length * 4, mFrameTextureBuffer, GLES20.GL_STATIC_DRAW);
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER,0);
     }

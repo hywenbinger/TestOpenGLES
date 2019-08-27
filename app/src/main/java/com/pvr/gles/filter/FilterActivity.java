@@ -28,7 +28,7 @@ public class FilterActivity extends AppCompatActivity {
         final MediaPlayer mediaPlayer = new MediaPlayer();
         mediaPlayer.setSurface(new Surface(mGLSurfaceView.getSurfaceTexture()));
         try {
-            File file = new File("/sdcard/1.mp4");
+            File file = new File("/sdcard/test.mp4");
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mediaPlayer.setDataSource(Uri.fromFile(file).toString());
             mediaPlayer.prepareAsync();

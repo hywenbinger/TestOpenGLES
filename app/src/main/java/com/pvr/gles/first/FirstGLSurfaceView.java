@@ -51,15 +51,8 @@ public class FirstGLSurfaceView extends GLSurfaceView implements GLSurfaceView.R
 
     private float[] pointVertex = {
             0f, 0f,
-            0.01f, 0.01f,
-            -0.1f, -0.1f,
-            0.02f, 0.02f,
-            0.03f, 0.03f,
-            0.04f, 0.04f,
-            0.05f, 0.05f,
-            0.06f, 0.06f,
     };
-    private FloatBuffer floatBuffer;
+    private FloatBuffer pointBuffer;
 
     public FirstGLSurfaceView(Context context) {
         super(context);
@@ -76,25 +69,20 @@ public class FirstGLSurfaceView extends GLSurfaceView implements GLSurfaceView.R
         setRenderer(this);
 
         program = buildProgram(vertexShaderCode, fragmentShaderCode);
-        // 使用该 OpenGL 程序
         GLES20.glUseProgram(program);
 
-        floatBuffer = ByteBuffer
+        pointBuffer = ByteBuffer
                 .allocateDirect(pointVertex.length * 4)
                 .order(ByteOrder.nativeOrder())
                 .asFloatBuffer()
                 .put(pointVertex);
+        pointBuffer.position(0);
     }
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         aColorLocation = GLES20.glGetUniformLocation(program, U_COLOR);
         aPositionLocation = GLES20.glGetAttribLocation(program, A_POSITION);
-
-        floatBuffer.position(0);
-        GLES20.glVertexAttribPointer(aPositionLocation, 2, GLES20.GL_FLOAT, false, 0, floatBuffer);
-        GLES20.glEnableVertexAttribArray(aPositionLocation);
-        floatBuffer.position(0);
     }
 
     @Override
@@ -107,7 +95,16 @@ public class FirstGLSurfaceView extends GLSurfaceView implements GLSurfaceView.R
         GLES20.glClearColor(0f, 0f, 0f, 1f);
         GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
 
-        GLES20.glUniform4f(aColorLocation, 0.0f, 0.0f, 1.0f, 1.0f);
+        pointBuffer.position(0);
+        //默认情况下，出于性能考虑，所有顶点着色器的属性（Attribute）变量都是关闭的，
+        //意味着数据在着色器端是不可见的，哪怕数据已经上传到GPU，
+        //由glEnableVertexAttribArray启用指定属性，才可在顶点着色器中访问逐顶点的属性数据。
+        GLES20.glEnableVertexAttribArray(aPositionLocation);
+        GLES20.glVertexAttribPointer(aPositionLocation, 2, GLES20.GL_FLOAT, false, 2*4, pointBuffer);
+        pointBuffer.position(0);
+
+        //给片段着色器的 u_Color 赋值
+        GLES20.glUniform4f(aColorLocation, 1.0f, 1.0f, 0.0f, 1.0f);
         GLES20.glDrawArrays(GLES20.GL_POINTS, 0, pointVertex.length / 2);
     }
 
